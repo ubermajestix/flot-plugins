@@ -1,5 +1,8 @@
 = Flot.js plugin for bubble charting
 
+Example:
+http://ubermajestix.com/flot/bubble
+
 http://code.google.com/p/flot
 
 == To activate bubbles:
