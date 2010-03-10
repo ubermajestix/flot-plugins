@@ -182,8 +182,8 @@ plot = $.plot($("#placeholder"), [
     function findNearbyItem(mouseX, mouseY, seriesFilter) {
       
         var maxDistance = plot.getOptions().grid.mouseActiveRadius,
-              smallestDistance = maxDistance * maxDistance + 1,
-            var item = null, foundPoint = false, i, j;
+            smallestDistance = maxDistance * maxDistance + 1,
+            item = null, foundPoint = false, i, j;
         // log("nearby. smallDis: ", smallestDistance)
         for (i = series.length - 1; i >= 0; --i) {
             if (!seriesFilter(series[i]))
@@ -195,11 +195,11 @@ plot = $.plot($("#placeholder"), [
                 points = s.datapoints.points,
                 ps = s.datapoints.pointsize,
                 mx = axisx.c2p(mouseX), // precompute some stuff to make the loop faster
-                my = axisy.c2p(mouseY),
+                my = axisy.c2p(mouseY)
                 // maxx = maxDistance / axisx.scale,
-                //    maxy = maxDistance / axisy.scale;
+                //maxy = maxDistance / axisy.scale;
 
-            if (s.lines.show || s.points.show) {
+            if(s.lines.show || s.points.show) {
                 for (j = 0; j < points.length; j += ps) {
                   
                     var x = points[j], y = points[j + 1];
@@ -385,7 +385,7 @@ plot = $.plot($("#placeholder"), [
 		}
 		
 function weShouldBubble() {
-    log('should we bubble? ', !!plot.getOptions().series.bubble && !!plot.getOptions().series.points.show)
+    // log('should we bubble? ', !!plot.getOptions().series.bubble && !!plot.getOptions().series.points.show)
     return !! plot.getOptions().series.bubble && !!plot.getOptions().series.points.show
 }
 		
