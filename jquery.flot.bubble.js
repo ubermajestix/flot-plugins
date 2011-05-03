@@ -142,20 +142,18 @@ plot = $.plot($("#placeholder"), [
     }    
     function triggerClickHoverEvent(eventname, event, seriesFilter) {
         var offset = bubble.eventHolder.offset(),
-            pos = { pageX: event.pageX, pageY: event.pageY },
-            canvasX = event.pageX - offset.left - plot.getPlotOffset().left,
-            canvasY = event.pageY - offset.top - plot.getPlotOffset().top;
+            pos = { pageX: event.pageX, pageY: event.pageY };
+        canvas = {
+            x: event.pageX - offset.left - plot.getPlotOffset().left,
+            y: event.pageY - offset.top - plot.getPlotOffset().top
+        };
+        pos = {}
         axes = plot.getAxes()
-        if (axes.xaxis.used)
-            pos.x = axes.xaxis.c2p(canvasX);
-        if (axes.yaxis.used)
-            pos.y = axes.yaxis.c2p(canvasY);
-        if (axes.x2axis.used)
-            pos.x2 = axes.x2axis.c2p(canvasX);
-        if (axes.y2axis.used)
-            pos.y2 = axes.y2axis.c2p(canvasY);
+        $.each(axes, function(index, axis) {
+            pos[axis.direction + (axis.n != 1 ? axis.n : "")] = axis.c2p(canvas[axis.direction])
+        })
 
-        var item = findNearbyItem(canvasX, canvasY, seriesFilter);
+        var item = findNearbyItem(canvas.x, canvas.y, seriesFilter);
 
         if (item) {
             // fill in mouse pos for any listeners out there
