@@ -189,7 +189,6 @@ plot = $.plot($("#placeholder"), [
                 my = axisy.c2p(mouseY)
                 // maxx = maxDistance / axisx.scale,
                 //maxy = maxDistance / axisy.scale;
-            console.log(mouseX, mouseY, mx, my)
 
             if(s.lines.show || s.points.show) {
                 for (j = 0; j < points.length; j += ps) {
@@ -403,12 +402,10 @@ function blowHighlights(plot, octx) {
       eventHolder: null,
       octx: null
     }
-      console.log("start", plot)
 
     plot.hooks.bindEvents.push(bindEvents);
     plot.hooks.draw.push(blowBubbles);
     plot.hooks.drawOverlay.push(blowHighlights);
-
   }
 
   $.plot.plugins.push({
