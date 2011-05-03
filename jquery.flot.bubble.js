@@ -404,7 +404,7 @@ function blowHighlights(plot, octx) {
   });
 
 }
-    var bubble = {
+    bubble = {
       eventHolder: null,
       octx: null
     }
