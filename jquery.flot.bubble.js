@@ -11,7 +11,7 @@ plot = $.plot($("#placeholder"), [
     series: {
       bubble: true, // set this to true to activate bubbles, otherwise your data will be plotted as points
       points: { show: true }, // bubbles will only work with point charts, the plugin will NOT attempt to bubble a bar chart
-      lines:  { show: true } // the bubble plugin supports connecting bubbles in a series with lines 
+      lines:  { show: true } // the bubble plugin supports connecting bubbles in a series with lines
     },
   }
 );
@@ -20,19 +20,19 @@ plot = $.plot($("#placeholder"), [
 
 (function ($) {
   var options = {
-    series: {bubble: null} 
+    series: {bubble: null}
   };
-  
+
   function init(plot) {
-    
+
     function log(){
       if(window.console) {
         console.log.apply(console, arguments);
       }
     }
-    
-      
-      
+
+
+
       function drawSeriesBubblePoints(series, ctx) {
             function plotPoints(datapoints, radius, fillStyle, offset, circumference, axisx, axisy, rawData) {
                 var points = datapoints.points, ps = datapoints.pointsize;
@@ -92,7 +92,7 @@ plot = $.plot($("#placeholder"), [
             //fill color is same as series
             // TODO allow to specify fillColor?
                 return getColorOrGradient(seriesColor, bottom, top, seriesColor);
-            
+
             var c = $.color.parse(seriesColor);
             c.a = typeof fill == "number" ? fill : 0.4;
             c.normalize();
@@ -125,29 +125,29 @@ plot = $.plot($("#placeholder"), [
             }
         }
 
-    
 
-    
-    
-    
+
+
+
+
     var highlights = []
     function onMouseMove(e) {
             triggerClickHoverEvent("plothover", e,
                                    function (s) { return s["hoverable"] != false; });
     }
-    
+
     function onClick(e) {
         triggerClickHoverEvent("plotclick", e,
                                function (s) { return s["clickable"] != false; });
-    }    
+    }
     function triggerClickHoverEvent(eventname, event, seriesFilter) {
         var offset = bubble.eventHolder.offset(),
-            pos = { pageX: event.pageX, pageY: event.pageY };
-        canvas = {
-            x: event.pageX - offset.left - plot.getPlotOffset().left,
-            y: event.pageY - offset.top - plot.getPlotOffset().top
-        };
-        axes = plot.getAxes()
+            pos = { pageX: event.pageX, pageY: event.pageY },
+            canvas = {
+                x: event.pageX - offset.left - plot.getPlotOffset().left,
+                y: event.pageY - offset.top - plot.getPlotOffset().top
+            };
+        var axes = plot.getAxes()
         $.each(axes, function(index, axis) {
             pos[axis.direction + (axis.n != 1 ? axis.n : "")] = axis.c2p(canvas[axis.direction])
         })
@@ -168,7 +168,7 @@ plot = $.plot($("#placeholder"), [
                     !(item && h.series == item.series && h.point == item.datapoint))
                     unhighlight(h.series, h.point);
             }
-            
+
             if (item)
                 highlight(item.series, item.datapoint, eventname);
         }
@@ -177,7 +177,7 @@ plot = $.plot($("#placeholder"), [
 
     // returns the data item the mouse is over, or null if none is found
     function findNearbyItem(mouseX, mouseY, seriesFilter) {
-      
+
         var maxDistance = plot.getOptions().grid.mouseActiveRadius,
             smallestDistance = maxDistance * maxDistance + 1,
             item = null, foundPoint = false, i, j;
@@ -185,7 +185,7 @@ plot = $.plot($("#placeholder"), [
         for (i = series.length - 1; i >= 0; --i) {
             if (!seriesFilter(series[i]))
                 continue;
-            
+
             var s = series[i],
                 axisx = s.xaxis,
                 axisy = s.yaxis,
@@ -198,7 +198,7 @@ plot = $.plot($("#placeholder"), [
 
             if(s.lines.show || s.points.show) {
                 for (j = 0; j < points.length; j += ps) {
-                  
+
                     var x = points[j], y = points[j + 1];
 
                     if (x == null)
@@ -212,8 +212,8 @@ plot = $.plot($("#placeholder"), [
                     // certain distance to the data point
                     maxx = newmaxDistance / axisx.scale,
                     maxy = newmaxDistance / axisy.scale;
-                    
-                    
+
+
                     if (x - mx > maxx || x - mx < -maxx ||
                         y - my > maxy || y - my < -maxy)
                         continue;
@@ -226,8 +226,8 @@ plot = $.plot($("#placeholder"), [
 
                     // use <= to ensure last point takes precedence
                     // (last generally means on top of)
- 
-                    
+
+
                     // log('dist: ', dist < newSmallDist)
                     // if (dist < smallestDistance) {
                     //     smallestDistance = dist;
@@ -237,19 +237,19 @@ plot = $.plot($("#placeholder"), [
                     }
                 }
             }
-                
+
             if (s.bars.show && !item) { // no other point can be nearby
                 var barLeft = s.bars.align == "left" ? 0 : -s.bars.barWidth/2,
                     barRight = barLeft + s.bars.barWidth;
-                
+
                 for (j = 0; j < points.length; j += ps) {
                     var x = points[j], y = points[j + 1], b = points[j + 2];
                     if (x == null)
                         continue;
 
                     // for a bar graph, the cursor must be inside the bar
-                    if (series[i].bars.horizontal ? 
-                        (mx <= Math.max(b, x) && mx >= Math.min(b, x) && 
+                    if (series[i].bars.horizontal ?
+                        (mx <= Math.max(b, x) && mx >= Math.min(b, x) &&
                          my >= y + barLeft && my <= y + barRight) :
                         (mx >= x + barLeft && mx <= x + barRight &&
                          my >= Math.min(b, y) && my <= Math.max(b, y)))
@@ -262,18 +262,18 @@ plot = $.plot($("#placeholder"), [
             i = item[0];
             j = item[1];
             ps = series[i].datapoints.pointsize;
-            
+
             return { datapoint: series[i].datapoints.points.slice(j * ps, (j + 1) * ps),
                      dataIndex: j,
                      series: series[i],
                      seriesIndex: i };
         }
-        
+
         return null;
     }
 
 
-    
+
     function highlight(s, point, auto) {
         if (typeof s == "number")
             s = series[s];
@@ -290,13 +290,13 @@ plot = $.plot($("#placeholder"), [
         else if (!auto)
             highlights[i].auto = false;
     }
-        
+
     function unhighlight(s, point) {
         if (s == null && point == null) {
             highlights = [];
             triggerRedrawOverlay();
         }
-        
+
         if (typeof s == "number")
             s = series[s];
 
@@ -310,7 +310,7 @@ plot = $.plot($("#placeholder"), [
             plot.triggerRedrawOverlay();
         }
     }
-    
+
     function indexOfHighlight(s, p) {
         for (var i = 0; i < highlights.length; ++i) {
             var h = highlights[i];
@@ -320,7 +320,7 @@ plot = $.plot($("#placeholder"), [
         }
         return -1;
     }
-    
+
     function drawPointHighlight(series, point) {
         var x = point[0], y = point[1], axisx = series.xaxis, axisy = series.yaxis;
         if (x < axisx.min || x > axisx.max || y < axisy.min || y > axisy.max)
@@ -329,14 +329,14 @@ plot = $.plot($("#placeholder"), [
         bubble_radius = radiusAtPoint(series, point)
         var radius = bubble_radius + series.points.lineWidth / 2;
         plotOffset = plot.getPlotOffset()
-        
+
         octx.lineWidth = series.points.lineWidth *5.5 ;
         octx.strokeStyle = $.color.parse(series.color).scale('a', 0.4).toString();
         octx.beginPath();
         octx.arc(axisx.p2c(x) + plotOffset.left, axisy.p2c(y) + plotOffset.top, radius, 0, 2 * Math.PI, false)
         octx.stroke();
     }
-    
+
     function axisSpecToRealAxis(obj, attr) {
         var a = obj[attr];
         if (!a || a == 1)
@@ -353,11 +353,11 @@ plot = $.plot($("#placeholder"), [
       $.each(series.data, function(index, data){
         radius_array.push(data[2])
       })
-      
+
       for (var i = 0; i < points.length; i += ps) {
         var x = points[i], y = points[i + 1];
         radius_index = i/2
-        
+
         // if(i > 0)
         //    radius_index = i/2
         if(point[0] == x && point[1] == y)
@@ -370,8 +370,8 @@ plot = $.plot($("#placeholder"), [
     }
 
     // bind hoverable events
-		function bindEvents(plot, eventHolder) 		
-		{		
+		function bindEvents(plot, eventHolder)
+		{
       bubble.eventHolder = eventHolder
 			var options = plot.getOptions();
 			if (weShouldBubble() && options.grid.hoverable)
@@ -380,12 +380,12 @@ plot = $.plot($("#placeholder"), [
       if (options.series.bubble && options.grid.clickable)
        eventHolder.unbind('click').click(onClick);
 		}
-		
+
 function weShouldBubble() {
     // log('should we bubble? ', !!plot.getOptions().series.bubble && !!plot.getOptions().series.points.show)
     return !! plot.getOptions().series.bubble && !!plot.getOptions().series.points.show
 }
-		
+
 function blowBubbles(plot, ctx) {
     if (!weShouldBubble())
     return;
@@ -394,7 +394,7 @@ function blowBubbles(plot, ctx) {
       drawSeriesBubblePoints(series, ctx)
     })
 }
-		
+
 function blowHighlights(plot, octx) {
   bubble.octx = octx
   if (!weShouldBubble())
@@ -402,24 +402,24 @@ function blowHighlights(plot, octx) {
   $.each(highlights, function(index, hi){
     drawPointHighlight(hi.series, hi.point);
   });
-            
+
 }
     bubble = {
       eventHolder: null,
       octx: null
     }
 
-    plot.hooks.bindEvents.push(bindEvents);	
+    plot.hooks.bindEvents.push(bindEvents);
     plot.hooks.draw.push(blowBubbles);
     plot.hooks.drawOverlay.push(blowHighlights);
-    
+
   }
-  
+
   $.plot.plugins.push({
       init: init,
       options: options,
       name: 'bubble',
       version: '0.1'
   });
-  
+
 })(jQuery);
