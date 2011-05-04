@@ -134,7 +134,7 @@ plot = $.plot($("#placeholder"), [
         var offset = plot.bubble.eventHolder.offset(),
             canvasX = event.pageX - offset.left - plot.getPlotOffset().left,
             canvasY = event.pageY - offset.top - plot.getPlotOffset().top,
-        pos = plot.c2p({ left: canvasX, top: canvasY });
+            pos = plot.c2p({ left: canvasX, top: canvasY });
 
         pos.pageX = event.pageX;
         pos.pageY = event.pageY;
@@ -313,10 +313,10 @@ plot = $.plot($("#placeholder"), [
         var x = point[0], y = point[1], axisx = series.xaxis, axisy = series.yaxis;
         if (x < axisx.min || x > axisx.max || y < axisy.min || y > axisy.max)
             return;
-        octx = plot.bubble.octx
-        bubble_radius = radiusAtPoint(series, point)
-        var radius = bubble_radius + series.points.lineWidth / 2;
-        plotOffset = plot.getPlotOffset()
+        var octx = plot.bubble.octx,
+            bubble_radius = radiusAtPoint(series, point),
+            radius = bubble_radius + series.points.lineWidth / 2,
+            plotOffset = plot.getPlotOffset();
 
         octx.lineWidth = series.points.lineWidth *5.5 ;
         octx.strokeStyle = $.color.parse(series.color).scale('a', 0.4).toString();
