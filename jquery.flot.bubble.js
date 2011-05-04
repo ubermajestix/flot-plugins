@@ -34,16 +34,12 @@ plot = $.plot($("#placeholder"), [
       function drawSeriesBubblePoints(series, ctx) {
             function plotPoints(datapoints, radius, fillStyle, offset, circumference, axisx, axisy, rawData) {
                 var points = datapoints.points, ps = datapoints.pointsize;
-                var radius_array = []
-                $.each(rawData, function(index, data){
-                  radius_array.push(data[2])
-                })
                 for (var i = 0; i < points.length; i += ps) {
                     var x = points[i], y = points[i + 1];
-                    radius_index = i/2
-                    radius = radius_array[radius_index]
                     if (x == null || x < axisx.min || x > axisx.max || y < axisy.min || y > axisy.max)
                         continue;
+                    var radius_index = i/2,
+                        radius = rawData[radius_index][2]
                     ctx.beginPath();
                     ctx.arc(axisx.p2c(x), axisy.p2c(y) + offset, radius, 0, circumference, false);
                     if (fillStyle) {
