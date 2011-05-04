@@ -56,7 +56,6 @@ plot = $.plot($("#placeholder"), [
             var lw = series.lines.lineWidth,
                 sw = series.shadowSize,
                 radius = series.points.radius;
-                series.data
             if (lw > 0 && sw > 0) {
                 // draw shadow in two steps
                 var w = sw / 2;
@@ -180,7 +179,7 @@ plot = $.plot($("#placeholder"), [
                 points = s.datapoints.points,
                 ps = s.datapoints.pointsize,
                 mx = axisx.c2p(mouseX), // precompute some stuff to make the loop faster
-                my = axisy.c2p(mouseY)
+                my = axisy.c2p(mouseY);
                 // maxx = maxDistance / axisx.scale,
                 //maxy = maxDistance / axisy.scale;
 
@@ -193,13 +192,13 @@ plot = $.plot($("#placeholder"), [
                         continue;
                     // TODO this is really slow b/c its doing array traversal to get the radius
                     // then sets the distances for every point on every hover
-                    var newmaxDistance = radiusAtPoint(s, [x,y])
+                    var newmaxDistance = radiusAtPoint(s, [x,y]),
                     // log("new max", newmaxDistance * newmaxDistance + 1)
-                    newSmallDist = newmaxDistance * newmaxDistance + 1
+                        newSmallDist = newmaxDistance * newmaxDistance + 1,
                     // For points and lines, the cursor must be within a
                     // certain distance to the data point
-                    maxx = newmaxDistance / axisx.scale,
-                    maxy = newmaxDistance / axisy.scale;
+                        maxx = newmaxDistance / axisx.scale,
+                        maxy = newmaxDistance / axisy.scale;
 
 
                     if (x - mx > maxx || x - mx < -maxx ||
@@ -249,7 +248,7 @@ plot = $.plot($("#placeholder"), [
         if (item) {
             i = item[0];
             j = item[1];
-            ps = series[i].datapoints.pointsize;
+            var ps = series[i].datapoints.pointsize;
 
             return { datapoint: series[i].datapoints.points.slice(j * ps, (j + 1) * ps),
                      dataIndex: j,
@@ -337,30 +336,27 @@ plot = $.plot($("#placeholder"), [
     //given a series and a point returns the radius defined in the dataset
     function radiusAtPoint(series, point){
       var points = series.datapoints.points, ps = series.datapoints.pointsize;
-      var radius_array = []
-      $.each(series.data, function(index, data){
-        radius_array.push(data[2])
-      })
 
-      for (var i = 0; i < points.length; i += ps) {
-        var x = points[i], y = points[i + 1];
-        radius_index = i/2
+      for (var i = points.length; i > 1; i -= ps) { // walk back to return the last (top) hit
+        var x = points[i - 2], y = points[i - 1];
 
         // if(i > 0)
         //    radius_index = i/2
-        if(point[0] == x && point[1] == y)
-          bubble_radius = radius_array[radius_index]
+        if(point[0] == x && point[1] == y) {
+          var radius_index = (i - 2) / 2;
+          return series.data[radius_index][2];
+        }
         // log(radius_array, radius_array[radius_index])
         // log(i,[x,y], radius_index)
       }
       // log("point: ", point, " radius: ", bubble_radius)
-      return bubble_radius
+      return 0;
     }
 
     // bind hoverable events
 		function bindEvents(plot, eventHolder)
 		{
-      plot.bubble.eventHolder = eventHolder
+            plot.bubble.eventHolder = eventHolder;
 			var options = plot.getOptions();
 			if (weShouldBubble() && options.grid.hoverable)
 				eventHolder.unbind('mousemove').mousemove(onMouseMove);
@@ -377,9 +373,9 @@ function weShouldBubble() {
 function blowBubbles(plot, ctx) {
     if (!weShouldBubble())
     return;
-    series = plot.getData()
-    $.each(series, function(index, series) {
-      drawSeriesBubblePoints(series, ctx)
+    var series = plot.getData()
+    $.each(series, function(index, s) {
+      drawSeriesBubblePoints(s, ctx)
     })
 }
 
