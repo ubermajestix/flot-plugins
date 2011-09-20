@@ -41,7 +41,14 @@ plot = $.plot($("#placeholder"), [
                     var radius_index = i/2,
                         radius = rawData[radius_index][2]
                     ctx.beginPath();
-                    ctx.arc(axisx.p2c(x), axisy.p2c(y) + offset, radius, 0, circumference, false);
+
+                    var options = plot.getOptions();
+                    if (options.series.bubble_options && options.series.bubble_options.occupancy){
+                        ctx.arc(axisx.p2c(x), axisy.p2c(y) + (options.series.bubble_options.radius_offset - radius), radius, 0, circumference, false);
+                    } else {
+                        ctx.arc(axisx.p2c(x), axisy.p2c(y) + offset, radius, 0, circumference, false);
+                    }
+
                     if (fillStyle) {
                         ctx.fillStyle = fillStyle;
                         ctx.fill();
